@@ -14,7 +14,9 @@ npm install --save es-apm-decorators
 
 ## Usage
 
-You can apply the `@Span()` decorator to class methods
+You can apply the `@Span()` decorator to class methods.  Class
+methods that are `async` will be correctly handled, with the span
+ending after the `async` call returns.
 
 ```typescript
 import { Span } from 'es-apm-decorators';
@@ -28,7 +30,7 @@ class MyClass {
 		// Do something interesting...
 	}
 
-	// You can override either name or type, or both at once
+	// You can override either name or type, or both at once.
 	@Span({ name: 'BigTransaction', type: 'db' })
 	public async interactWithDatabase() {
 		// Do some big database transaction...
