@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "mocha --exit -r ts-node/register 'tests/**/*.ts'",
+    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"tests/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",

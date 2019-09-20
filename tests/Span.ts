@@ -1,11 +1,16 @@
-import * as apm from 'elastic-apm-node';
 import * as chai from 'chai';
+import * as apm from 'elastic-apm-node';
+import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
+
+// Mocha does not want arrow functions so it can do `this` shenanigans,
+// and we want to be able to use chai's expressions that don't end in
+// actual function calls.
+// tslint:disable:only-arrow-functions no-unused-expression
 
 chai.use(sinonChai);
 
 import { Span } from '../src';
-import sinon = require('sinon');
 
 const expect = chai.expect;
 
