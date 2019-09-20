@@ -1,0 +1,35 @@
+{
+  "name": "es-apm-decorators",
+  "version": "0.0.1",
+  "description": "Decorators for using Elasticsearch APM in Typescript",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+	"format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"tests/**/*.ts\"",
+	"lint": "tslint -p tsconfig.json",
+	"prepare": "npm run build",
+	"prepublishOnly": "npm test && npm run lint",
+	"preversion": "npm run lint",
+	"version": "npm run format && git add -A src"
+  },
+  "files": ["lib/**/*"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evertras/es-apm-decorators.git"
+  },
+  "keywords": ["Elasticsearch", "APM", "Typescript"],
+  "author": "Brandon Fulljames",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Evertras/es-apm-decorators/issues"
+  },
+  "homepage": "https://github.com/Evertras/es-apm-decorators#readme",
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.6.3"
+  }
+}
