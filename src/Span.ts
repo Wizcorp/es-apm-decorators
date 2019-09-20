@@ -1,6 +1,11 @@
-import apm from 'elastic-apm-node';
+import * as apm from 'elastic-apm-node';
 
-export function Span() {
+export interface ISpanConfig {
+	name?: string;
+	type?: string;
+}
+
+export function Span(config?: ISpanConfig) {
     return (
         target: any,
         propertyKey: string,
@@ -11,11 +16,14 @@ export function Span() {
         const className = target.constructor.name;
         const fnName = propertyKey;
 
-        const name = `${className}.${fnName}`;
+		config = config || {};
+
+        const spanName = config.name || `${className}.${fnName}`;
+		const spanType = config.type || className;
 
         if (descriptor.value.constructor.name === 'AsyncFunction') {
             descriptor.value = async function(...args: any[]) {
-                const span = apm.startSpan(name, className);
+                const span = apm.startSpan(spanName, spanType);
 
                 try {
                     const ret = await original.apply(this, args);
@@ -33,12 +41,16 @@ export function Span() {
                         curTransaction.result = 'error';
                     }
 
+					if (span) {
+						span.end();
+					}
+
                     throw err;
                 }
             };
         } else {
             descriptor.value = function(...args: any[]) {
-                const span = apm.startSpan(name, className);
+                const span = apm.startSpan(spanName, spanType);
 
                 try {
                     const ret = original.apply(this, args);
@@ -54,8 +66,11 @@ export function Span() {
 
                     if (curTransaction) {
                         curTransaction.result = 'error';
-                        console.log(curTransaction.result);
                     }
+
+					if (span) {
+						span.end();
+					}
 
                     throw err;
                 }
