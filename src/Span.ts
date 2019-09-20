@@ -1,8 +1,8 @@
 import * as apm from 'elastic-apm-node';
 
 export interface ISpanConfig {
-	name?: string;
-	type?: string;
+    name?: string;
+    type?: string;
 }
 
 export function Span(config?: ISpanConfig) {
@@ -16,10 +16,10 @@ export function Span(config?: ISpanConfig) {
         const className = target.constructor.name;
         const fnName = propertyKey;
 
-		config = config || {};
+        config = config || {};
 
         const spanName = config.name || `${className}.${fnName}`;
-		const spanType = config.type || className;
+        const spanType = config.type || className;
 
         if (descriptor.value.constructor.name === 'AsyncFunction') {
             descriptor.value = async function(...args: any[]) {
@@ -41,9 +41,9 @@ export function Span(config?: ISpanConfig) {
                         curTransaction.result = 'error';
                     }
 
-					if (span) {
-						span.end();
-					}
+                    if (span) {
+                        span.end();
+                    }
 
                     throw err;
                 }
@@ -68,9 +68,9 @@ export function Span(config?: ISpanConfig) {
                         curTransaction.result = 'error';
                     }
 
-					if (span) {
-						span.end();
-					}
+                    if (span) {
+                        span.end();
+                    }
 
                     throw err;
                 }
