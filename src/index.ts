@@ -1,1 +1,1 @@
-export const Testing = (name: string) => 'Hello ' + name;
+export * from './Span';

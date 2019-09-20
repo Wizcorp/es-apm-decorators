@@ -43,5 +43,9 @@
     "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "@types/node": "^12.7.5",
+    "elastic-apm-node": "^2.17.0"
   }
 }
