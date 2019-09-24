@@ -7,16 +7,16 @@ export interface ITransaction {
 }
 
 export interface IApm {
-    currentTransaction: ITransaction | undefined;
+    currentTransaction: ITransaction | null;
 
     startSpan(spanName: string, spanType: string): ISpan | null;
     captureError(err: Error | string): void;
 }
 
-// tslint:disable:no-empty
 export let activeApm: IApm = {
+    // tslint:disable-next-line:no-empty
     captureError: () => {},
-    currentTransaction: undefined,
+    currentTransaction: null,
     startSpan: () => null,
 };
 
