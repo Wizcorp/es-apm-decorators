@@ -3,7 +3,7 @@ export interface ISpan {
 }
 
 export interface ITransaction {
-    result: string;
+    result: string | number;
 }
 
 export interface IApm {
