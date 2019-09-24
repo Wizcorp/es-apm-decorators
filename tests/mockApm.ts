@@ -1,4 +1,4 @@
-import { IApm, ISpan, ITransaction } from '../src';
+import { IApm, ISpan, ITransaction } from '../src/apm';
 
 export class MockApm implements IApm {
     public currentTransaction: ITransaction | undefined = undefined;
