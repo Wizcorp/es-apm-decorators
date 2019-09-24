@@ -13,7 +13,16 @@ export interface IApm {
     captureError(err: Error | string): void;
 }
 
-export let activeApm: IApm;
+// tslint:disable:no-empty
+export let activeApm: IApm = {
+    captureError: () => {},
+    currentTransaction: undefined,
+    startSpan: () => {
+        return {
+            end: () => {},
+        };
+    },
+};
 
 export function useApm(apm: IApm) {
     activeApm = apm;

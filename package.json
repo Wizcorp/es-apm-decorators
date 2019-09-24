@@ -6,10 +6,11 @@
   "types": "lib/src/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+	"clean": "rm -rf lib",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"tests/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
-    "prepare": "npm run build",
+    "prepare": "npm run clean && npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
