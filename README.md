@@ -21,8 +21,11 @@ If you do not call `useApm`, a dummy instance that does nothing
 will be used instead.  This is useful to get out of the way of tests.
 
 ```typescript
+// index.ts
 import * as apm from 'elasticsearch-apm-node';
 import { useApm } from 'es-apm-decorators';
+
+apm.start(/* config */);
 
 useApm(apm);
 ```
