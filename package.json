@@ -1,6 +1,6 @@
 {
   "name": "es-apm-decorators",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Decorators for using Elasticsearch APM in Typescript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -31,7 +31,7 @@
     "Elasticsearch",
     "APM",
     "Typescript",
-	"Decorator"
+    "Decorator"
   ],
   "author": "Brandon Fulljames",
   "license": "ISC",
