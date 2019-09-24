@@ -26,6 +26,16 @@ const overriddenName = 'OBJECTION';
 const overriddenType = 'OVERRULED';
 
 class SpanTest {
+    @Span()
+    public static doTheThingStatic(): number {
+        return expectedReturnNumber;
+    }
+
+    @Span()
+    public static async doTheThingStaticAsync(): Promise<number> {
+        return expectedReturnNumber;
+    }
+
     public didTheThing: boolean = false;
 
     public doTheThingNoSpan(): number {
@@ -150,6 +160,14 @@ describe('Span', function() {
                 );
             });
 
+            it('names the span as Class.Method for static functions', function() {
+                SpanTest.doTheThingStatic();
+
+                expect(startSpanStub).to.be.calledWith(
+                    `${spanTestClassName}.doTheThingStatic`,
+                );
+            });
+
             it('overrides the name completely when set by config', function() {
                 const s = new SpanTest();
 
@@ -235,6 +253,14 @@ describe('Span', function() {
                 await s.doTheThingWithCustomNameAsync();
 
                 expect(startSpanStub).to.be.calledWith(overriddenName);
+            });
+
+            it('names the span as Class.Method for static functions', async function() {
+                await SpanTest.doTheThingStaticAsync();
+
+                expect(startSpanStub).to.be.calledWith(
+                    `${spanTestClassName}.doTheThingStaticAsync`,
+                );
             });
         });
 

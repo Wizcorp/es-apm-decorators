@@ -13,7 +13,7 @@ export function Span(config?: ISpanConfig) {
     ) => {
         const original = descriptor.value;
 
-        const className = target.constructor.name;
+        const className = target.constructor.name === 'Function' ? target.name : target.constructor.name;
         const fnName = propertyKey;
 
         config = config || {};
