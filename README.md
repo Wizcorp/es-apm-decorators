@@ -14,6 +14,19 @@ npm install --save es-apm-decorators
 
 ## Usage
 
+Since the Elasticsearch APM module uses a global instance, you must
+supply the global instance to be used by the decorators.  Do this
+as soon as possible in your code, preferably right after `apm.start()`.
+If you do not call `useApm`, a dummy instance that does nothing
+will be used instead.  This is useful to get out of the way of tests.
+
+```typescript
+import * as apm from 'elasticsearch-apm-node';
+import { useApm } from 'es-apm-decorators';
+
+useApm(apm);
+```
+
 You can apply the `@Span()` decorator to class methods.  Class
 methods that are `async` will be correctly handled, with the span
 ending after the `async` call returns.
