@@ -1,4 +1,4 @@
-import * as apm from 'elastic-apm-node';
+import { activeApm } from './apm';
 
 export interface ISpanConfig {
     name?: string;
@@ -23,7 +23,7 @@ export function Span(config?: ISpanConfig) {
 
         if (descriptor.value.constructor.name === 'AsyncFunction') {
             descriptor.value = async function(...args: any[]) {
-                const span = apm.startSpan(spanName, spanType);
+                const span = activeApm.startSpan(spanName, spanType);
 
                 try {
                     const ret = await original.apply(this, args);
@@ -34,8 +34,8 @@ export function Span(config?: ISpanConfig) {
 
                     return ret;
                 } catch (err) {
-                    apm.captureError(err);
-                    const curTransaction = apm.currentTransaction;
+                    activeApm.captureError(err);
+                    const curTransaction = activeApm.currentTransaction;
 
                     if (curTransaction) {
                         curTransaction.result = 'error';
@@ -50,7 +50,7 @@ export function Span(config?: ISpanConfig) {
             };
         } else {
             descriptor.value = function(...args: any[]) {
-                const span = apm.startSpan(spanName, spanType);
+                const span = activeApm.startSpan(spanName, spanType);
 
                 try {
                     const ret = original.apply(this, args);
@@ -61,8 +61,8 @@ export function Span(config?: ISpanConfig) {
 
                     return ret;
                 } catch (err) {
-                    apm.captureError(err);
-                    const curTransaction = apm.currentTransaction;
+                    activeApm.captureError(err);
+                    const curTransaction = activeApm.currentTransaction;
 
                     if (curTransaction) {
                         curTransaction.result = 'error';

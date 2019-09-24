@@ -1,5 +1,4 @@
 import * as chai from 'chai';
-import * as apm from 'elastic-apm-node';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 
@@ -10,7 +9,8 @@ import * as sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-import { Span } from '../src';
+import { Span, useApm } from '../src';
+import { MockApm } from './mockApm';
 
 const expect = chai.expect;
 
@@ -89,6 +89,8 @@ describe('Span', function() {
     };
 
     beforeEach(function() {
+        const apm = new MockApm();
+
         spanStub = {
             end: sinon.stub(),
         };
@@ -98,6 +100,8 @@ describe('Span', function() {
 
         (apm as any).startSpan = startSpanStub;
         (apm as any).captureError = captureErrorStub;
+
+        useApm(apm);
     });
 
     describe('Sync Methods', function() {
