@@ -1,12 +1,12 @@
 {
   "name": "es-apm-decorators",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Decorators for using Elasticsearch APM in Typescript",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register 'tests/**/*.ts'",
-	"clean": "rm -rf lib",
+    "clean": "rm -rf lib",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"tests/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
