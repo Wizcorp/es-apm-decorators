@@ -9,7 +9,7 @@ export interface ITransaction {
 export interface IApm {
     currentTransaction: ITransaction | undefined;
 
-    startSpan(spanName: string, spanType: string): ISpan;
+    startSpan(spanName: string, spanType: string): ISpan | null;
     captureError(err: Error | string): void;
 }
 
@@ -17,11 +17,7 @@ export interface IApm {
 export let activeApm: IApm = {
     captureError: () => {},
     currentTransaction: undefined,
-    startSpan: () => {
-        return {
-            end: () => {},
-        };
-    },
+    startSpan: () => null,
 };
 
 export function useApm(apm: IApm) {
