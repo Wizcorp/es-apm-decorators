@@ -52,8 +52,6 @@ class SpanTest {
     @Span()
     public doTheThingThrowsError(): number {
         throw new Error(expectedErrorMsg);
-
-        return expectedReturnNumber;
     }
 
     @Span()
@@ -66,8 +64,6 @@ class SpanTest {
     @Span()
     public async doTheThingThrowsErrorAsync(): Promise<number> {
         throw new Error(expectedErrorMsg);
-
-        return expectedReturnNumber;
     }
 
     @Span({ name: overriddenName })
@@ -89,6 +85,17 @@ class SpanTest {
     public async doTheThingWithCustomTypeAsync(): Promise<number> {
         return expectedReturnNumber;
     }
+
+    @Span()
+    public async doTheThingReturnsPromiseAsync(timeoutMs: number): Promise<number> {
+        const promise = new Promise<number>((resolve) => {
+            setTimeout(() => {
+                resolve(expectedReturnNumber);
+            }, timeoutMs);
+        });
+
+        return promise;
+    }
 }
 
 describe('Span', function() {
@@ -97,6 +104,7 @@ describe('Span', function() {
     let spanStub: {
         end: sinon.SinonStub;
     };
+    let clock: sinon.SinonFakeTimers;
 
     beforeEach(function() {
         const apm = new MockApm();
@@ -111,7 +119,13 @@ describe('Span', function() {
         (apm as any).startSpan = startSpanStub;
         (apm as any).captureError = captureErrorStub;
 
+        clock = sinon.useFakeTimers();
+
         useApm(apm);
+    });
+
+    afterEach(function() {
+        clock.restore();
     });
 
     describe('Sync Methods', function() {
@@ -127,7 +141,7 @@ describe('Span', function() {
         it('creates a span and ends it', function() {
             const s = new SpanTest();
 
-            const ret = s.doTheThingSpanned();
+            s.doTheThingSpanned();
 
             expect(startSpanStub).to.be.calledOnce;
             expect(spanStub.end).to.be.calledOnce;
@@ -215,7 +229,7 @@ describe('Span', function() {
         it('creates a span and ends it', async function() {
             const s = new SpanTest();
 
-            const ret = await s.doTheThingSpannedAsync();
+            await s.doTheThingSpannedAsync();
 
             expect(startSpanStub).to.be.calledOnce;
             expect(spanStub.end).to.be.calledOnce;
@@ -234,6 +248,26 @@ describe('Span', function() {
 
             expect(spanStub.end).to.be.calledOnce;
             expect(captureErrorStub).to.be.calledOnce;
+        });
+
+        it('waits for a promise to resolve before ending the span', async function() {
+            const s = new SpanTest();
+            const waitTimeMs = 1000;
+
+            setTimeout(() => {
+                expect(spanStub.end).to.not.be.called;
+            }, waitTimeMs / 3);
+
+            const retPromise = s.doTheThingReturnsPromiseAsync(waitTimeMs);
+
+            clock.tick(waitTimeMs / 2);
+            clock.tick(waitTimeMs / 2 + 1);
+
+            const ret = await retPromise;
+
+            expect(spanStub.end).to.be.calledOnce;
+
+            expect(ret).to.equal(expectedReturnNumber);
         });
 
         describe('Name', function() {
