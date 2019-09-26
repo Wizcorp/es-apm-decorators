@@ -26,7 +26,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Evertras/es-apm-decorators.git"
+    "url": "git+https://github.com/Wizcorp/es-apm-decorators.git"
   },
   "keywords": [
     "Elasticsearch",
@@ -37,9 +37,9 @@
   "author": "Brandon Fulljames",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Evertras/es-apm-decorators/issues"
+    "url": "https://github.com/Wizcorp/es-apm-decorators/issues"
   },
-  "homepage": "https://github.com/Evertras/es-apm-decorators#readme",
+  "homepage": "https://github.com/Wizcorp/es-apm-decorators#readme",
   "devDependencies": {
     "@types/chai": "^4.2.3",
     "@types/mocha": "^5.2.7",
