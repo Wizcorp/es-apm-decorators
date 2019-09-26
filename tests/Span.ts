@@ -87,6 +87,17 @@ class SpanTest {
     }
 
     @Span()
+    public doTheThingReturnsPromise(timeoutMs: number): Promise<number> {
+        const promise = new Promise<number>((resolve) => {
+            setTimeout(() => {
+                resolve(expectedReturnNumber);
+            }, timeoutMs);
+        });
+
+        return promise;
+    }
+
+    @Span()
     public async doTheThingReturnsPromiseAsync(timeoutMs: number): Promise<number> {
         const promise = new Promise<number>((resolve) => {
             setTimeout(() => {
@@ -250,7 +261,27 @@ describe('Span', function() {
             expect(captureErrorStub).to.be.calledOnce;
         });
 
-        it('waits for a promise to resolve before ending the span', async function() {
+        it('waits for a returned promise without async to resolve before ending the span', async function() {
+            const s = new SpanTest();
+            const waitTimeMs = 1000;
+
+            setTimeout(() => {
+                expect(spanStub.end).to.not.be.called;
+            }, waitTimeMs / 3);
+
+            const retPromise = s.doTheThingReturnsPromise(waitTimeMs);
+
+            clock.tick(waitTimeMs / 2);
+            clock.tick(waitTimeMs / 2 + 1);
+
+            const ret = await retPromise;
+
+            expect(spanStub.end).to.be.calledOnce;
+
+            expect(ret).to.equal(expectedReturnNumber);
+        });
+
+        it('waits for an async promise to resolve before ending the span', async function() {
             const s = new SpanTest();
             const waitTimeMs = 1000;
 

@@ -10,8 +10,7 @@ export function Span(config?: ISpanConfig) {
         target: any,
         propertyKey: string,
         descriptor: PropertyDescriptor,
-    ) => {
-        const original = descriptor.value;
+    ) => { const original = descriptor.value;
 
         const className =
             target.constructor.name === 'Function'
@@ -59,7 +58,11 @@ export function Span(config?: ISpanConfig) {
                     const ret = original.apply(this, args);
 
                     if (span) {
-                        span.end();
+                        if (ret && ret.then && ret.catch) {
+                            ret.then(span.end).catch(span.end);
+                        } else {
+                            span.end();
+                        }
                     }
 
                     return ret;
