@@ -60,7 +60,8 @@ export function Span(config?: ISpanConfig) {
 
                     if (span) {
                         if (ret && ret.then && ret.catch) {
-                            ret.then(span.end).catch(span.end);
+                            ret.then(() => span.end())
+                               .catch(() => span.end());
                         } else {
                             span.end();
                         }

@@ -88,7 +88,7 @@ class SpanTest {
 
     @Span()
     public doTheThingReturnsPromise(timeoutMs: number): Promise<number> {
-        const promise = new Promise<number>((resolve) => {
+        const promise = new Promise<number>(resolve => {
             setTimeout(() => {
                 resolve(expectedReturnNumber);
             }, timeoutMs);
@@ -98,8 +98,10 @@ class SpanTest {
     }
 
     @Span()
-    public async doTheThingReturnsPromiseAsync(timeoutMs: number): Promise<number> {
-        const promise = new Promise<number>((resolve) => {
+    public async doTheThingReturnsPromiseAsync(
+        timeoutMs: number,
+    ): Promise<number> {
+        const promise = new Promise<number>(resolve => {
             setTimeout(() => {
                 resolve(expectedReturnNumber);
             }, timeoutMs);
