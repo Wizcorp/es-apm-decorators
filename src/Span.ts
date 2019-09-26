@@ -10,7 +10,8 @@ export function Span(config?: ISpanConfig) {
         target: any,
         propertyKey: string,
         descriptor: PropertyDescriptor,
-    ) => { const original = descriptor.value;
+    ) => {
+        const original = descriptor.value;
 
         const className =
             target.constructor.name === 'Function'
