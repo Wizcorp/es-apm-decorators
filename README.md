@@ -1,5 +1,7 @@
 # es-apm-decorators
 
+[![Build](https://img.shields.io/travis/Wizcorp/es-apm-decorators?style=flat-square)](https://travis-ci.org/Wizcorp/es-apm-decorators)
+
 The [Elasticsearch APM Node API](https://www.elastic.co/guide/en/apm/agent/nodejs/current/index.html)
 is great for automatically plugging into various existing
 frameworks, but can be a little verbose to add your own
