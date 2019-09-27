@@ -32,6 +32,8 @@ apm.start(/* config */);
 useApm(apm);
 ```
 
+### Instrumenting class methods with `@Span()`
+
 You can apply the `@Span()` decorator to class methods.  Class
 methods that are `async` will be correctly handled, with the span
 ending after the `async` call returns.
@@ -56,10 +58,46 @@ class MyClass {
 }
 ```
 
+### Instrumenting arbitrary functions using `withSpan()`
+
+If you want to create a span for an arbitrary function that
+isn't part of a class, you can use `withSpan()`.  The `withSpan()`
+function takes a single function as a parameter and returns
+a new function with exactly the same signature as the original,
+but with a span around it.  `withSpan()` takes the same configuration
+options as `@Span()`.
+
+```typescript
+import { withSpan } from 'es-apm-decorators';
+
+// Works with async and non-async
+async function doBigDatabaseThing(host: string, port: number): Promise<number> {
+	// Do some big heavy database transaction and return some value
+	// ...
+	return id;
+}
+
+// Will create a span with the name `doBigDatabaseThing` and type `function`
+const doBigDatabaseThingSpanned = withSpan(doBigDatabaseThing);
+
+// Alternatively, supply your own name and/or type
+// const doBigDatabaseThingSpanned = withSpan(doBigDatabaseThing, { name: 'Big Database Thing' });
+// const doBigDatabaseThingSpanned = withSpan(doBigDatabaseThing, { name: 'Big Database Thing', type: 'db' });
+
+// You can now use the wrapped function exactly like the original.
+// The return value and any thrown errors are the same as before.
+try {
+	const id = await doBigDatabaseThingSpanned('internal.mysql', 1234);
+} catch (err) {
+	console.error(err);
+}
+```
+
 ## Error handling
 
-If a decorated method throws any errors, the current transaction
-will be marked with an 'error' result.
+If a wrapped or decorated method throws any errors, the current transaction
+will be marked with an 'error' result.  Otherwise the transaction result is
+not changed.
 
 *TODO:* Make this more configurable
 

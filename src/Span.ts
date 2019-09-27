@@ -5,6 +5,49 @@ export interface ISpanConfig {
     type?: string;
 }
 
+export function withSpan<T>(fn: T, config?: ISpanConfig): T {
+    const spanName = config && config.name ? config.name : (fn as any).name;
+    const spanType = config && config.type ? config.type : 'function';
+
+    return ((...args: any) => {
+        const span = activeApm.startSpan(spanName, spanType);
+
+        try {
+            const ret = (fn as any)(...args);
+
+            if (span) {
+                if (ret && ret.then && ret.catch) {
+                    ret.then(() => span.end()).catch((err: Error) => {
+                        activeApm.captureError(err);
+
+                        if (activeApm.currentTransaction) {
+                            activeApm.currentTransaction.result = 'error';
+                        }
+
+                        span.end();
+                    });
+                } else {
+                    span.end();
+                }
+            }
+
+            return ret;
+        } catch (err) {
+            activeApm.captureError(err);
+
+            if (activeApm.currentTransaction) {
+                activeApm.currentTransaction.result = 'error';
+            }
+
+            if (span) {
+                span.end();
+            }
+
+            throw err;
+        }
+    }) as any;
+}
+
 export function Span(config?: ISpanConfig) {
     return (
         target: any,
